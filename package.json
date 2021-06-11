@@ -1,0 +1,26 @@
+{
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "posthtml-md": "^1.1.0"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
+    "mvp.css": "^1.7.4",
+    "preact": "^10.5.13",
+    "preact-router": "^3.2.1",
+    "react-redux": "^7.2.4",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0"
+  },
+  "alias": {
+    "react": "preact/compat",
+    "react-dom": "preact/compat"
+  },
+  "browserslist": [
+    "since 2017-06"
+  ]
+}
