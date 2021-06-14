@@ -1,27 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createContext } from 'preact';
 
-export default createSlice({
-	name: 'counter',
-	initialState: {
-		value: 0,
-	},
-	reducers: {
-		increment(state) {
-			state.value += 1;
-	    },
-	    decrement(state) {
-			state.value -= 1;
-	    },
-	},	
-});
+export class Counter {
+	count = 0;
 
-function delay(t) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, t);
-    });
+	increment() {
+		this.count += 1;
+	}
+	decrement() {
+		this.count -= 1;
+	}
+	addNumber(payload) {
+		// console.debug(payload);
+		this.count += payload;
+	}
+	incrementDelayed(payload, dispatch) {
+		function delay(t) {
+			return new Promise((resolve) => {
+				setTimeout(resolve, t);
+			});
+		}
+		delay(1000).then(() => {
+			dispatch('increment');
+		}).catch((e) => {
+			console.error(e);
+		});
+	}
 }
 
-export async function incrementDelayedThunk(dispatch, getState) {
-    await delay(2000);
-    dispatch({ type: 'counter/increment' });
-};
+export const CounterContext = createContext([]);

@@ -1,22 +1,13 @@
 import { h } from 'preact';
-// import { useState } from 'preact/hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import counterSlice, { incrementDelayedThunk } from '../features/counter';
+import { useContext } from 'preact/hooks';
 
 /** @jsx h */
 
 import Nav from '../components/Nav';
+import { CounterContext } from "../features/counter";
 
 export default function Page2() {
-    const count = useSelector((state) => state.counter.value);
-    const dispatch = useDispatch();
-    // const [count, saveCount] = useState(1);
-
-    const dispatchIncrement = () => {
-        // dispatch(counterSlice.actions.increment());
-        // dispatch({type: 'counter/increment'});
-        dispatch(incrementDelayedThunk);
-    };
+    const [counter, dispatch] = useContext(CounterContext);
 
     return <div>
         <header>
@@ -27,8 +18,8 @@ export default function Page2() {
             <p>Page 2</p>
     
             <h2>Self delayed</h2>
-            <p>{ count }</p>
-            <button onClick={ dispatchIncrement }>+1</button>
+            <p>{ counter.count }</p>
+            <button onClick={ () => dispatch('incrementDelayed') }>+1</button>
 
             <h2>Remote immediate</h2>
             <CountDisplay />
@@ -38,11 +29,12 @@ export default function Page2() {
 };
 
 function CountDisplay() {
-    const count = useSelector((state) => state.counter.value);
-    return <p>{ count }</p>;
+    const [counter] = useContext(CounterContext);
+    return <p>{ counter.count }</p>;
 }
 
 function CountIncrementButton() {
-    const dispatch = useDispatch();
-    return <button onClick={ () => dispatch({type: 'counter/increment'}) }>+1</button>;
+    const [,dispatch] = useContext(CounterContext);
+    // return <button onClick={ () => dispatch({type: 'add', payload: 2}) }>+2</button>;
+    return <button onClick={ () => dispatch('addNumber', 2) }>+2</button>;
 }
