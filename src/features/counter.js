@@ -1,9 +1,8 @@
 export class Counter {
-    _count = {
-        value: 0,
-    };
-
     constructor(initialCount) {
+        this._count = {
+            value: 0,
+        };
         if (initialCount) {
             this._count.value = initialCount;
         }
