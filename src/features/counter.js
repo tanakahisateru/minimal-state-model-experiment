@@ -1,30 +1,45 @@
-import { createContext } from 'preact';
-
 export class Counter {
-	count = 0;
+	_count = {
+		value: 0,
+	};
+
+	constructor(initialCount) {
+		if (initialCount) {
+			this._count.value = initialCount;
+		}
+	}
+
+	get count() {
+		return this._count.value;
+	}
 
 	increment() {
-		this.count += 1;
+		this._count.value += 1;
 	}
 	decrement() {
-		this.count -= 1;
+		this._count.value -= 1;
 	}
 	addNumber(payload) {
-		// console.debug(payload);
-		this.count += payload;
+		this._count.value += payload;
 	}
-	incrementDelayed(payload, dispatch) {
+
+	async incrementDelayed(payload, dispatch) {
 		function delay(t) {
 			return new Promise((resolve) => {
 				setTimeout(resolve, t);
 			});
 		}
-		delay(1000).then(() => {
+
+		// NEVER call dispatch() before the first await!
+		this.increment();
+
+		await delay(500);
+		for (let i = 0; i < payload - 1; i++) {
+			await delay(100);
 			dispatch('increment');
-		}).catch((e) => {
-			console.error(e);
-		});
+		}
 	}
 }
 
+import { createContext } from 'preact';
 export const CounterContext = createContext([]);

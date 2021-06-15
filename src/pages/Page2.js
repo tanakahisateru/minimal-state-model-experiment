@@ -18,8 +18,8 @@ export default function Page2() {
             <p>Page 2</p>
     
             <h2>Self delayed</h2>
-            <p>{ counter.count }</p>
-            <button onClick={ () => dispatch('incrementDelayed') }>+1</button>
+            <p>{ counter._count.value }</p>
+            <button onClick={ () => dispatch('incrementDelayed', 10) }>+10</button>
 
             <h2>Remote immediate</h2>
             <CountDisplay />

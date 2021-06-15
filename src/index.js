@@ -8,15 +8,19 @@ import { h, render } from 'preact';
 /** @jsx h */
 
 import { Counter, CounterContext } from './features/counter';
-import {useStateClass} from './lib/plux';
+import { useStateClass } from './lib/plux';
 
 import Router from 'preact-router';
 import Home from './pages/Home';
 import Page2 from './pages/Page2';
 
 function Index() {
+	const stateContext = useStateClass(Counter, {
+		params: [1],
+		// debug: true,
+	});
 	return (
-		<CounterContext.Provider value={ useStateClass(Counter) }>
+		<CounterContext.Provider value={ stateContext }>
 			<Router>
 				<Home path="/" />
 				<Page2 path="/p2" />
