@@ -13,10 +13,12 @@ import { useStateClass } from './lib/plux';
 import Router from 'preact-router';
 import Home from './pages/Home';
 import Page2 from './pages/Page2';
+import {useReducer} from "preact/hooks";
 
 function Index() {
 	const stateContext = useStateClass(Counter, {
 		params: [1],
+		// reducerHook: useReducer,
 		// debug: true,
 	});
 	return (

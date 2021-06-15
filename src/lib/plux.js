@@ -1,8 +1,7 @@
-import {useReducer} from "preact/hooks";
-
 export function useStateClass(classDefinition, options = {}) {
     options = Object.assign({
         params: [],
+        reducerHook: null,
         debug: false,
     }, options);
 
@@ -30,6 +29,10 @@ export function useStateClass(classDefinition, options = {}) {
         }
         return newState;
     };
+
+    const useReducer = options.reducerHook ?
+        options.reducerHook :
+        require("react").useReducer;
 
     const [state, dispatch] = useReducer(reducer, new classDefinition(...options.params));
 
