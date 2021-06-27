@@ -15,6 +15,12 @@ export function useStateClass(classDefinition, options = {}) {
             return stateWrapper;
         }
         const actionReturnValue = targetMethod.call(state, action.payload, stateWrapper.__dispatch);
+        if (actionReturnValue === false) {
+            if (options.debug) {
+                console.log("Canceled");
+            }
+            return stateWrapper;
+        }
 
         if (options.debug) {
             let info = [action.type];
