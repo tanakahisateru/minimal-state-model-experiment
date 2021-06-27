@@ -5,16 +5,17 @@ export function useStateClass(classDefinition, options = {}) {
         debug: false,
     }, options);
 
-    const reducer = (state, action) => {
-        const target = state[action.type];
-        if (!target) {
+    const reducer = (stateWrapper, action) => {
+        const state = stateWrapper.payload;
+        const targetMethod = state[action.type];
+        if (!targetMethod) {
             if (options.debug) {
                 console.error("No such action", action.type);
             }
-            return state;
+            return stateWrapper;
         }
-        const newState = Object.assign(Object.create(state), state);
-        const actionReturnValue = target.call(newState, action.payload, state.__dispatch);
+        const actionReturnValue = targetMethod.call(state, action.payload, stateWrapper.__dispatch);
+
         if (options.debug) {
             let info = [action.type];
             if (action.payload) {
@@ -27,14 +28,16 @@ export function useStateClass(classDefinition, options = {}) {
                 console.log("Invoke", ...info);
             }
         }
-        return newState;
+
+        return {payload: state, __dispatch: stateWrapper.__dispatch};
     };
 
     const useReducer = options.reducerHook ?
         options.reducerHook :
         require("react").useReducer;
 
-    const [state, dispatch] = useReducer(reducer, new classDefinition(...options.params));
+    const state = new classDefinition(...options.params);
+    const [stateWrapper, dispatch] = useReducer(reducer, {payload: state});
 
     const __dispatch = (action, payload) => {
         if (typeof action !== 'object' || typeof action.type === 'undefined') {
@@ -45,7 +48,7 @@ export function useStateClass(classDefinition, options = {}) {
         }
         dispatch(action);
     };
-    state.__dispatch = __dispatch;
+    stateWrapper.__dispatch = __dispatch;
 
-    return [state, __dispatch];
+    return [stateWrapper.payload, __dispatch];
 }
